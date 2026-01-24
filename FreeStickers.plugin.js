@@ -1,6 +1,6 @@
 /**
  * @name FreeStickers
- * @version 1.4.8
+ * @version 1.4.9
  * @description Link stickers or upload animated stickers as gifs!
  * @author An0 & Riolubruh
  * @source https://github.com/riolubruh/DiscordFreeStickers
@@ -3701,11 +3701,10 @@ function findModules(modules) {
 
 
 const {
-    MessageActions, MessageQueue, MessageDispatcher, MessageCache, ChannelStore, UserStore, StickerStore, XhrClient, PermissionEvaluator
+    MessageActions, MessageQueue, MessageCache, ChannelStore, UserStore, StickerStore, XhrClient, PermissionEvaluator
 } = findModules({
     MessageActions: ['deleteMessage', 'sendClydeError'],
     MessageQueue: ['enqueue', 'requests'],
-    MessageDispatcher: ['dispatch', 'wait'],
     MessageCache: ['getMessage', 'getMessages'],
     ChannelStore: ['getChannel', 'getDMFromUserId'],
     UserStore: ['getCurrentUser'],
@@ -3715,6 +3714,7 @@ const {
 });
 
 const CloudUploader = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byPrototypeKeys("uploadFileToCloud"),{searchExports: true});
+const MessageDispatcher = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byKeys("dispatch", 'subscribe'),{searchExports: true});
 
 const functionToString = (() => {
     const iframe = document.createElement('iframe');
@@ -3727,7 +3727,7 @@ const functionToString = (() => {
 
 const StickerSendability = BdApi.Webpack.getByKeys("SENDABLE", {searchExports:true});
 
-const StickerSendabilityModule = BdApi.Webpack.getMangled("SENDABLE_WITH_BOOSTED_GUILD",{
+const StickerSendabilityModule = BdApi.Webpack.getMangled(BdApi.Webpack.Filters.bySource("SENDABLE_WITH_BOOSTED_GUILD", 'canUseCustomStickersEverywhere'),{
     getStickerSendability: BdApi.Webpack.Filters.byStrings("canUseCustomStickersEverywhere"),
     isSendableSticker: BdApi.Webpack.Filters.byStrings(")=>0===")
 });
