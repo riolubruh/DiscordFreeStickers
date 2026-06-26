@@ -1,6 +1,6 @@
 /**
  * @name FreeStickers
- * @version 1.4.9
+ * @version 1.4.10
  * @description Link stickers or upload animated stickers as gifs!
  * @author An0 & Riolubruh
  * @source https://github.com/riolubruh/DiscordFreeStickers
@@ -3729,7 +3729,7 @@ const StickerSendability = BdApi.Webpack.getByKeys("SENDABLE", {searchExports:tr
 
 const StickerSendabilityModule = BdApi.Webpack.getMangled(BdApi.Webpack.Filters.bySource("SENDABLE_WITH_BOOSTED_GUILD", 'canUseCustomStickersEverywhere'),{
     getStickerSendability: BdApi.Webpack.Filters.byStrings("canUseCustomStickersEverywhere"),
-    isSendableSticker: BdApi.Webpack.Filters.byStrings(")=>0===")
+    isSendableSticker: BdApi.Webpack.Filters.byStrings("0===")
 });
 
 if (!(StickerSendability && StickerSendabilityModule.getStickerSendability && StickerSendabilityModule.isSendableSticker && StickerSendabilityModule))
