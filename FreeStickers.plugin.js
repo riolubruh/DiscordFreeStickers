@@ -3731,7 +3731,7 @@ const StickerSendabilityModule = BdApi.Webpack.getMangled(BdApi.Webpack.Filters.
     getStickerSendability: BdApi.Webpack.Filters.byStrings("canUseCustomStickersEverywhere")
 });
 
-if (!(StickerSendability && StickerSendabilityModule.getStickerSendability && StickerSendabilityModule))
+if (!(StickerSendability && StickerSendabilityModule?.getStickerSendability))
     throw new Error("Couldn't find StickerSendabilityModule");
 
 const postAwaiters = new Map();
