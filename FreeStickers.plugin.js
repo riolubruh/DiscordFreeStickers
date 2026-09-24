@@ -1,6 +1,6 @@
 /**
  * @name FreeStickers
- * @version 1.4.10
+ * @version 1.4.11
  * @description Link stickers or upload animated stickers as gifs!
  * @author An0 & Riolubruh
  * @source https://github.com/riolubruh/DiscordFreeStickers
@@ -3728,11 +3728,10 @@ const functionToString = (() => {
 const StickerSendability = BdApi.Webpack.getByKeys("SENDABLE", {searchExports:true});
 
 const StickerSendabilityModule = BdApi.Webpack.getMangled(BdApi.Webpack.Filters.bySource("SENDABLE_WITH_BOOSTED_GUILD", 'canUseCustomStickersEverywhere'),{
-    getStickerSendability: BdApi.Webpack.Filters.byStrings("canUseCustomStickersEverywhere"),
-    isSendableSticker: BdApi.Webpack.Filters.byStrings("0===")
+    getStickerSendability: BdApi.Webpack.Filters.byStrings("canUseCustomStickersEverywhere")
 });
 
-if (!(StickerSendability && StickerSendabilityModule.getStickerSendability && StickerSendabilityModule.isSendableSticker && StickerSendabilityModule))
+if (!(StickerSendability && StickerSendabilityModule.getStickerSendability && StickerSendabilityModule))
     throw new Error("Couldn't find StickerSendabilityModule");
 
 const postAwaiters = new Map();
@@ -3762,31 +3761,6 @@ BdApi.Patcher.instead('FreeStickers', StickerSendabilityModule, "getStickerSenda
     }else{
         return 0;
     }
-});
-
-BdApi.Patcher.instead('FreeStickers', StickerSendabilityModule, "isSendableSticker", (thisObject, methodArguments, originalMethod) => {
-    let stickerSendability = StickerSendabilityModule.getStickerSendability.apply(thisObject, methodArguments);
-
-    if(stickerSendability === StickerSendability.SENDABLE) {
-        return true;
-    }
-
-    if(stickerSendability === StickerSendability.NONSENDABLE) {
-        const [sticker, user, channel] = methodArguments;
-
-        if(channel.type === 1/*DM*/ || channel.type === 3/*GROUP_DM*/) {
-            return true;
-        }
-
-        if(sticker.format_type === 1/*PNG*/) {
-            return checkPermission(1n << 14n/*EMBED_LINKS*/, user, channel);
-        }
-        else {
-            return checkPermission(1n << 15n/*ATTACH_FILES*/, user, channel);
-        }
-    }
-
-    return false;
 });
 
 function getStickerAssetUrl(sticker) {
